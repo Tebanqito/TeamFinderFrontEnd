@@ -1,0 +1,24 @@
+<main class="auth">
+  <section class="tarjeta">
+    <img class="logo" src="img/logo.png" alt="Logo de MatchFinder" />
+    <h1 class="marca">MatchFinder</h1>
+    <p class="lema">Armá tu equipo. Jugá tu torneo.</p>
+
+    <!-- Provisorio: hasta que existan las pantallas internas, al iniciar sesión se muestra esta confirmación -->
+    @if (authService.sesion(); as sesion) {
+      <div class="sesion" role="status">
+        <h2>Sesión iniciada</h2>
+        <p>Entraste como <strong>{{ sesion.email }}</strong></p>
+        <p><span class="rol">{{ sesion.rol }}</span></p>
+        <button class="btn out" type="button" (click)="cerrarSesion()">Cerrar sesión</button>
+      </div>
+    } @else {
+      <nav class="pestanias" aria-label="Acceso">
+        <a class="btn out" routerLink="/login" routerLinkActive="activa">Ingresar</a>
+        <a class="btn out" routerLink="/registro" routerLinkActive="activa">Registrarme</a>
+      </nav>
+
+      <router-outlet />
+    }
+  </section>
+</main>

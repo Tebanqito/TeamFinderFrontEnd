@@ -1,9 +1,18 @@
 import { Routes } from '@angular/router';
 
+import { AuthLayoutComponent } from './features/auth/auth-layout/auth-layout.component';
+import { LoginComponent } from './features/auth/login/login.component';
 import { RegistroComponent } from './features/auth/registro/registro.component';
 
 export const routes: Routes = [
-  { path: 'registro', component: RegistroComponent },
-  { path: '', redirectTo: 'registro', pathMatch: 'full' },
-  { path: '**', redirectTo: 'registro' },
+  {
+    path: '',
+    component: AuthLayoutComponent,
+    children: [
+      { path: 'login', component: LoginComponent },
+      { path: 'registro', component: RegistroComponent },
+      { path: '', redirectTo: 'login', pathMatch: 'full' },
+    ],
+  },
+  { path: '**', redirectTo: 'login' },
 ];

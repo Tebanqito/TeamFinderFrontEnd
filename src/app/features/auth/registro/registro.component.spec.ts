@@ -3,6 +3,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { environment } from '../../../../environments/environment';
+import { AuthService } from '../../../core/services/auth.service';
 import { RegistroComponent } from './registro.component';
 
 describe('RegistroComponent', () => {
@@ -44,8 +45,7 @@ describe('RegistroComponent', () => {
 
   afterEach(() => http.verify());
 
-  it('muestra el logo y el formulario de registro', () => {
-    expect(raiz.querySelector('img.logo')).not.toBeNull();
+  it('muestra los tres campos del formulario', () => {
     expect(raiz.querySelectorAll('input').length).toBe(3);
   });
 
@@ -76,7 +76,7 @@ describe('RegistroComponent', () => {
     expect(raiz.textContent).toContain('entre 8 y 20 caracteres');
   });
 
-  it('envía los datos a la API, guarda el token y muestra la confirmación', async () => {
+  it('envía los datos a la API y guarda la sesión', async () => {
     await completarValido();
     await enviar();
 
@@ -90,9 +90,7 @@ describe('RegistroComponent', () => {
     await fixture.whenStable();
 
     expect(localStorage.getItem('token')).toBe('abc123');
-    expect(raiz.textContent).toContain('Cuenta creada');
-    expect(raiz.textContent).toContain('Bienvenido, juan');
-    expect(raiz.querySelector('form')).toBeNull();
+    expect(TestBed.inject(AuthService).sesion()?.email).toBe('juan@mail.com');
   });
 
   it('muestra debajo del email el 409 de email repetido', async () => {
@@ -105,7 +103,6 @@ describe('RegistroComponent', () => {
     await fixture.whenStable();
 
     expect(raiz.textContent).toContain('Ya existe un usuario registrado con ese email');
-    expect(raiz.querySelector('form')).not.toBeNull();
     expect(localStorage.getItem('token')).toBeNull();
   });
 

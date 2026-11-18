@@ -1,1 +1,129 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --celeste: #75aadb;
+  --navy: #0b2a4a;
+  --gold: #f6b40e;
+  --bg: #f4f8fc;
+  --card: #ffffff;
+  --text: #0b2a4a;
+  --muted: #5b7089;
+  --line: #d6e4f2;
+  --chip: #e8f1fa;
+  --bad: #c0392b;
+  --ok: #1e8e5a;
+  --fuente-titulos: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  --fuente-texto: 'Inter', system-ui, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0a1626;
+    --card: #122339;
+    --text: #eaf2fb;
+    --muted: #9db4cc;
+    --line: #23405f;
+    --chip: #1a3250;
+    --bad: #ff8a80;
+    --ok: #5ed39b;
+    color-scheme: dark;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 400 15px/1.5 var(--fuente-texto);
+}
+
+h1,
+h2,
+h3 {
+  margin: 0 0 0.5rem;
+  font-family: var(--fuente-titulos);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+input {
+  width: 100%;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+}
+
+input:focus-visible {
+  outline: 2px solid var(--celeste);
+  outline-offset: 1px;
+}
+
+.btn {
+  padding: 0.5rem 1.1rem;
+  border: 0;
+  border-radius: 6px;
+  background: var(--gold);
+  color: var(--navy);
+  font-family: var(--fuente-titulos);
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transform: skew(-8deg);
+}
+
+.btn:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn.out {
+  border: 2px solid var(--celeste);
+  background: transparent;
+  color: var(--text);
+}
+
+.formulario {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.formulario .btn {
+  width: 100%;
+}
+
+input.invalido {
+  border-color: var(--bad);
+}
+
+.error {
+  margin: 0.25rem 0 0;
+  color: var(--bad);
+  font-size: 0.85rem;
+}
+
+.error.general {
+  margin: 0;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--bad);
+  border-radius: 8px;
+}

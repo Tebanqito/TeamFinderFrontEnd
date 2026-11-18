@@ -1,0 +1,49 @@
+<form #f="ngForm" class="formulario" novalidate (ngSubmit)="enviar(f)">
+  <div>
+    <label>
+      Email
+      <input
+        name="email"
+        type="email"
+        autocomplete="username"
+        maxlength="100"
+        required
+        email
+        [(ngModel)]="datos.email"
+        (ngModelChange)="limpiarErrorApi('email')"
+        #email="ngModel"
+        [class.invalido]="errorDe('email', email, f.submitted)"
+      />
+    </label>
+    @if (errorDe('email', email, f.submitted); as mensaje) {
+      <p class="error" role="alert">{{ mensaje }}</p>
+    }
+  </div>
+
+  <div>
+    <label>
+      Contraseña
+      <input
+        name="password"
+        type="password"
+        autocomplete="current-password"
+        required
+        [(ngModel)]="datos.password"
+        (ngModelChange)="limpiarErrorApi('password')"
+        #password="ngModel"
+        [class.invalido]="errorDe('password', password, f.submitted)"
+      />
+    </label>
+    @if (errorDe('password', password, f.submitted); as mensaje) {
+      <p class="error" role="alert">{{ mensaje }}</p>
+    }
+  </div>
+
+  @if (errorGeneral(); as mensaje) {
+    <p class="error general" role="alert">{{ mensaje }}</p>
+  }
+
+  <button class="btn" type="submit" [disabled]="enviando()">
+    {{ enviando() ? 'Ingresando...' : 'Ingresar' }}
+  </button>
+</form>

@@ -1,0 +1,25 @@
+<div class="pagina">
+  @if (esOwner()) {
+    <section class="card gold">
+      <h2>Equipos</h2>
+      <p class="muted">El owner administra los equipos del sistema, pero no puede crear uno propio.</p>
+    </section>
+  } @else if (cargando()) {
+    <section class="card">
+      <p class="muted" role="status">Cargando tu equipo...</p>
+    </section>
+  } @else if (errorCarga(); as mensaje) {
+    <section class="card gold">
+      <h2>Equipos</h2>
+      <p class="error general" role="alert">{{ mensaje }}</p>
+      <button class="btn out sm reintentar" type="button" (click)="cargarMiEquipo()">Reintentar</button>
+    </section>
+  } @else if (miEquipo(); as equipo) {
+    @if (recienCreado()) {
+      <p class="aviso" role="status">Equipo creado correctamente.</p>
+    }
+    <app-mi-equipo [equipo]="equipo" />
+  } @else {
+    <app-equipo-crear (creado)="alCrear($event)" />
+  }
+</div>

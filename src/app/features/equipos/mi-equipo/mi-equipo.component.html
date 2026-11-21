@@ -1,0 +1,15 @@
+<section class="card gold">
+  <h2>Mi equipo</h2>
+  <h3>
+    {{ equipo().nombre }}
+    <span class="badge">{{ tipo() }}</span>
+  </h3>
+  <p>{{ equipo().descripcion }}</p>
+  <div class="bar"><i [style.width.%]="porcentajeCupo()"></i></div>
+  <small>{{ equipo().cantidadMiembros }}/{{ equipo().cupo }} integrantes</small>
+  <div>
+    @for (miembro of equipo().miembros; track miembro.id) {
+      <span class="chip">{{ miembro.nombre }}</span>
+    }
+  </div>
+</section>

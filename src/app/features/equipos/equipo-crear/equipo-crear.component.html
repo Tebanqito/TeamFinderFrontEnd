@@ -1,0 +1,74 @@
+<section class="card gold">
+  <h2>Crear mi equipo</h2>
+
+  <form #f="ngForm" class="formulario" novalidate (ngSubmit)="enviar(f)">
+    <div class="campos">
+      <div>
+        <label>
+          Nombre
+          <input
+            name="nombre"
+            type="text"
+            maxlength="100"
+            required
+            [(ngModel)]="datos.nombre"
+            (ngModelChange)="limpiarErrorApi('nombre')"
+            #nombre="ngModel"
+            [class.invalido]="errorDe('nombre', nombre, f.submitted)"
+          />
+        </label>
+        @if (errorDe('nombre', nombre, f.submitted); as mensaje) {
+          <p class="error" role="alert">{{ mensaje }}</p>
+        }
+      </div>
+
+      <div>
+        <label>
+          Tipo
+          <select
+            name="tipo"
+            required
+            [(ngModel)]="datos.tipo"
+            (ngModelChange)="limpiarErrorApi('tipo')"
+            #tipo="ngModel"
+            [class.invalido]="errorDe('tipo', tipo, f.submitted)"
+          >
+            @for (opcion of tipos; track opcion.valor) {
+              <option [ngValue]="opcion.valor">{{ opcion.nombre }} ({{ opcion.cupo }} jugadores)</option>
+            }
+          </select>
+        </label>
+        @if (errorDe('tipo', tipo, f.submitted); as mensaje) {
+          <p class="error" role="alert">{{ mensaje }}</p>
+        }
+      </div>
+    </div>
+
+    <div>
+      <label>
+        Descripción
+        <textarea
+          name="descripcion"
+          rows="3"
+          maxlength="500"
+          required
+          [(ngModel)]="datos.descripcion"
+          (ngModelChange)="limpiarErrorApi('descripcion')"
+          #descripcion="ngModel"
+          [class.invalido]="errorDe('descripcion', descripcion, f.submitted)"
+        ></textarea>
+      </label>
+      @if (errorDe('descripcion', descripcion, f.submitted); as mensaje) {
+        <p class="error" role="alert">{{ mensaje }}</p>
+      }
+    </div>
+
+    @if (errorGeneral(); as mensaje) {
+      <p class="error general" role="alert">{{ mensaje }}</p>
+    }
+
+    <button class="btn" type="submit" [disabled]="enviando()">
+      {{ enviando() ? 'Creando equipo...' : 'Crear equipo' }}
+    </button>
+  </form>
+</section>

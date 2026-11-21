@@ -95,3 +95,35 @@ input:focus-visible {
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+.btn.out {
+  border: 2px solid var(--celeste);
+  background: transparent;
+  color: var(--text);
+}
+
+.formulario {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.formulario .btn {
+  width: 100%;
+}
+
+input.invalido {
+  border-color: var(--bad);
+}
+
+.error {
+  margin: 0.25rem 0 0;
+  color: var(--bad);
+  font-size: 0.85rem;
+}
+
+.error.general {
+  margin: 0;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--bad);
+  border-radius: 8px;
+}

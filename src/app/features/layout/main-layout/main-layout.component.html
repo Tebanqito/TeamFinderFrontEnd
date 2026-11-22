@@ -6,9 +6,6 @@
 
   <nav class="tabs" aria-label="Principal">
     <a class="tab" routerLink="/equipos" routerLinkActive="activa">Equipos</a>
-    @if (authService.sesion()?.rol !== 'OWNER') {
-      <a class="tab" routerLink="/amigos" routerLinkActive="activa">Amigos</a>
-    }
   </nav>
 
   @if (authService.sesion(); as sesion) {

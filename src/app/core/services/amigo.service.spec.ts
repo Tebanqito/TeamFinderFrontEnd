@@ -8,8 +8,6 @@ import { amigoDePrueba } from '../testing/datos-prueba';
 import { AmigoService } from './amigo.service';
 
 describe('AmigoService', () => {
-  afterEach(() => TestBed.resetTestingModule());
-
   it('listar pide GET /amigos', () => {
     TestBed.configureTestingModule({ providers: [provideHttpClient(), provideHttpClientTesting()] });
     const http = TestBed.inject(HttpTestingController);
@@ -23,17 +21,5 @@ describe('AmigoService', () => {
     http.verify();
 
     expect(recibidos.map((a) => a.nombre)).toEqual(['lucas', 'ana']);
-  });
-
-  it('eliminar pide DELETE /amigos/{id}', () => {
-    TestBed.configureTestingModule({ providers: [provideHttpClient(), provideHttpClientTesting()] });
-    const http = TestBed.inject(HttpTestingController);
-
-    TestBed.inject(AmigoService).eliminar(9).subscribe();
-
-    const req = http.expectOne(`${environment.apiUrl}/amigos/9`);
-    expect(req.request.method).toBe('DELETE');
-    req.flush(null, { status: 204, statusText: 'No Content' });
-    http.verify();
   });
 });

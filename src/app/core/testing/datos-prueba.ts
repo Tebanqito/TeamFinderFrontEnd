@@ -1,4 +1,3 @@
-import { SolicitudAmistad } from '../models/solicitud.model';
 import { Amigo } from '../models/amigo.model';
 import { EquipoDetalle } from '../models/equipo.model';
 import { Pagina } from '../models/pagina.model';
@@ -26,14 +25,4 @@ export function paginaDePrueba<T>(contenido: T[], cambios: Partial<Pagina<T>> = 
 
 export function amigoDePrueba(cambios: Partial<Amigo> = {}): Amigo {
   return { id: 9, nombre: 'lucas', equipoId: null, ...cambios };
-}
-
-export function solicitudDePrueba(cambios: Partial<SolicitudAmistad> = {}): SolicitudAmistad {
-  return {
-    id: 1,
-    remitente: { id: 20, nombre: 'ana' },
-    destinatario: { id: 3, nombre: 'juan' },
-    estado: 'PENDIENTE',
-    ...cambios,
-  };
 }

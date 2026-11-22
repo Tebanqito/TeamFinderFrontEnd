@@ -6,11 +6,18 @@
 
   <nav class="tabs" aria-label="Principal">
     <a class="tab" routerLink="/equipos" routerLinkActive="activa">Equipos</a>
+    @if (authService.sesion()?.rol !== 'OWNER') {
+      <a class="tab" routerLink="/amigos" routerLinkActive="activa">Amigos</a>
+    }
+    <a class="tab" routerLink="/torneo" routerLinkActive="activa">Torneo</a>
+    @if (authService.sesion()?.rol === 'OWNER') {
+      <a class="tab" routerLink="/usuarios" routerLinkActive="activa">Usuarios</a>
+    }
   </nav>
 
   @if (authService.sesion(); as sesion) {
     <span class="usuario">
-      {{ sesion.email }}
+      {{ sesion.nombre ?? sesion.email }}
       <span class="badge g">{{ sesion.rol }}</span>
     </span>
   }

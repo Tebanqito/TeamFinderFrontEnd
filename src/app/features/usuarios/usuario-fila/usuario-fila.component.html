@@ -1,0 +1,18 @@
+<div class="ur">
+  <b>{{ usuario().nombre }}</b>
+  <span class="muted">{{ usuario().email }}</span>
+  <span class="badge">{{ usuario().rol }}</span>
+  @if (usuario().equipoNombre; as equipo) {
+    <span class="chip">{{ equipo }}</span>
+  }
+  @if (puedeEliminar() && !confirmando()) {
+    <button class="btn sm bad" type="button" [disabled]="ocupado()" (click)="confirmando.set(true)">Eliminar</button>
+  }
+</div>
+@if (confirmando()) {
+  <div class="confirmacion" role="alertdialog" aria-label="Confirmar eliminación">
+    <span>¿Eliminar a "{{ usuario().nombre }}"? Se borran también sus amistades y solicitudes.</span>
+    <button class="btn bad sm" type="button" [disabled]="ocupado()" (click)="confirmar()">Sí, eliminar</button>
+    <button class="btn out sm" type="button" (click)="confirmando.set(false)">Cancelar</button>
+  </div>
+}

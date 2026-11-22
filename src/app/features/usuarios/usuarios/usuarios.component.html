@@ -1,0 +1,42 @@
+<div class="pagina">
+  <section class="card gold">
+    <h2>Usuarios</h2>
+    <label>
+      Buscar por nombre
+      <input
+        name="busqueda"
+        type="search"
+        placeholder="Escribí un nombre…"
+        autocomplete="off"
+        [(ngModel)]="texto"
+        (ngModelChange)="alEscribir()"
+      />
+    </label>
+
+    <div style="margin-top: 0.8rem">
+      @if (errorCarga(); as mensaje) {
+        <p class="error general" role="alert">{{ mensaje }}</p>
+        <button class="btn out sm reintentar" type="button" (click)="buscar()">Reintentar</button>
+      } @else if (cargando()) {
+        <p class="muted" role="status">Cargando usuarios...</p>
+      } @else {
+        <p class="muted">Mostrando {{ usuarios().length }} de {{ total() }}</p>
+        @for (usuario of usuarios(); track usuario.id) {
+          <app-usuario-fila
+            [usuario]="usuario"
+            [puedeEliminar]="puedeEliminar(usuario)"
+            [ocupado]="eliminandoId() !== null"
+            (eliminar)="eliminar($event)"
+          />
+        } @empty {
+          <p class="muted">No se encontraron usuarios con ese nombre.</p>
+        }
+        @if (hayMas()) {
+          <button class="btn sm out" type="button" style="margin-top: 0.6rem" [disabled]="cargandoMas()" (click)="verMas()">
+            {{ cargandoMas() ? 'Cargando...' : 'Ver más' }}
+          </button>
+        }
+      }
+    </div>
+  </section>
+</div>

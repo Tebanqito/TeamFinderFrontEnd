@@ -5,7 +5,7 @@ import { TestBed } from '@angular/core/testing';
 import { environment } from '../../../environments/environment';
 import { AuthService } from './auth.service';
 
-const respuesta = { accessToken: 'abc123', tokenType: 'Bearer', email: 'juan@mail.com', rol: 'USUARIO' };
+const respuesta = { accessToken: 'abc123', tokenType: 'Bearer', email: 'juan@mail.com', nombre: 'juan', rol: 'USUARIO' };
 
 /** Arma un JWT de prueba con la fecha de vencimiento indicada (en segundos). */
 const jwtConVencimiento = (exp: number) => `cabecera.${btoa(JSON.stringify({ sub: 'juan@mail.com', exp }))}.firma`;
@@ -39,11 +39,12 @@ describe('AuthService', () => {
 
     expect(recibida).toEqual(respuesta);
     expect(localStorage.getItem('token')).toBe('abc123');
-    expect(servicio.sesion()).toEqual({ token: 'abc123', email: 'juan@mail.com', rol: 'USUARIO' });
+    expect(servicio.sesion()).toEqual({ token: 'abc123', email: 'juan@mail.com', nombre: 'juan', rol: 'USUARIO' });
+    expect(localStorage.getItem('nombre')).toBe('juan');
     expect(servicio.estaLogueado()).toBe(true);
   });
 
-  it('login envía POST /auth/login y guarda token, email y rol', () => {
+  it('login envía POST /auth/login y guarda token, email, nombre y rol', () => {
     const servicio = crearServicio();
     const credenciales = { email: 'juan@mail.com', password: 'clave12345' };
 
@@ -56,6 +57,7 @@ describe('AuthService', () => {
 
     expect(localStorage.getItem('token')).toBe('abc123');
     expect(localStorage.getItem('email')).toBe('juan@mail.com');
+    expect(localStorage.getItem('nombre')).toBe('juan');
     expect(localStorage.getItem('rol')).toBe('USUARIO');
     expect(servicio.sesion()?.rol).toBe('USUARIO');
   });
@@ -89,11 +91,13 @@ describe('AuthService', () => {
   it('recupera la sesión guardada al abrir la página', () => {
     localStorage.setItem('token', jwtConVencimiento(enUnaHora()));
     localStorage.setItem('email', 'owner@matchfinder.com');
+    localStorage.setItem('nombre', 'owner');
     localStorage.setItem('rol', 'OWNER');
 
     const servicio = crearServicio();
 
     expect(servicio.sesion()?.email).toBe('owner@matchfinder.com');
+    expect(servicio.sesion()?.nombre).toBe('owner');
     expect(servicio.sesion()?.rol).toBe('OWNER');
   });
 

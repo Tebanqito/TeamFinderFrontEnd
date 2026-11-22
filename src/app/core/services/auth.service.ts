@@ -39,8 +39,9 @@ export class AuthService {
   private guardarSesion(respuesta: AuthResponse): void {
     localStorage.setItem('token', respuesta.accessToken);
     localStorage.setItem('email', respuesta.email);
+    localStorage.setItem('nombre', respuesta.nombre);
     localStorage.setItem('rol', respuesta.rol);
-    this.sesion.set({ token: respuesta.accessToken, email: respuesta.email, rol: respuesta.rol });
+    this.sesion.set({ token: respuesta.accessToken, email: respuesta.email, nombre: respuesta.nombre, rol: respuesta.rol });
   }
 
   private leerSesionGuardada(): Sesion | null {
@@ -55,12 +56,13 @@ export class AuthService {
       this.borrarSesionGuardada();
       return null;
     }
-    return { token, email, rol };
+    return { token, email, nombre: localStorage.getItem('nombre') ?? undefined, rol };
   }
 
   private borrarSesionGuardada(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('email');
+    localStorage.removeItem('nombre');
     localStorage.removeItem('rol');
   }
 

@@ -1,22 +1,20 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit, computed, inject, signal, viewChild } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 
 import { EquipoDetalle } from '../../../core/models/equipo.model';
 import { AuthService } from '../../../core/services/auth.service';
 import { EquipoService } from '../../../core/services/equipo.service';
-import { mensajeDeError } from '../../../core/utils/problema-api';
+import { MENSAJE_SIN_CONEXION, leerProblema } from '../../../core/utils/problema-api';
 import { EquipoCrearComponent } from '../equipo-crear/equipo-crear.component';
-import { EquipoListaComponent } from '../equipo-lista/equipo-lista.component';
 import { MiEquipoComponent } from '../mi-equipo/mi-equipo.component';
 
 /**
- * Pantalla de equipos.
- * - Usuario: su equipo (o el formulario para crearlo) y el listado de todos los equipos para unirse.
- * - Owner: el listado, donde puede eliminar equipos. No crea ni se une a ninguno.
+ * Pantalla de equipos. Al abrirse le pregunta a la API a qué equipo pertenece el usuario:
+ * si tiene uno muestra "Mi equipo"; si no, el formulario para crearlo.
  */
 @Component({
   selector: 'app-equipos',
-  imports: [EquipoCrearComponent, MiEquipoComponent, EquipoListaComponent],
+  imports: [EquipoCrearComponent, MiEquipoComponent],
   templateUrl: './equipos.component.html',
   styleUrl: './equipos.component.css',
 })
@@ -24,8 +22,7 @@ export class EquiposComponent implements OnInit {
   private readonly equipoService = inject(EquipoService);
   private readonly authService = inject(AuthService);
 
-  private readonly lista = viewChild(EquipoListaComponent);
-
+  /** El owner administra los equipos pero no pertenece a ninguno: la API le responde 403. */
   protected readonly esOwner = computed(() => this.authService.sesion()?.rol === 'OWNER');
 
   protected readonly cargando = signal(false);
@@ -50,7 +47,8 @@ export class EquiposComponent implements OnInit {
       },
       error: (err: HttpErrorResponse) => {
         this.cargando.set(false);
-        this.errorCarga.set(mensajeDeError(err));
+        const problema = leerProblema(err);
+        this.errorCarga.set(problema.sinConexion ? MENSAJE_SIN_CONEXION : problema.detalle);
       },
     });
   }
@@ -58,19 +56,5 @@ export class EquiposComponent implements OnInit {
   protected alCrear(equipo: EquipoDetalle): void {
     this.miEquipo.set(equipo);
     this.recienCreado.set(true);
-    this.lista()?.recargar();
-  }
-
-  /** Se unió a un equipo o cambió el suyo: se actualiza "Mi equipo" y el listado. */
-  protected alCambiarMiEquipo(equipo: EquipoDetalle): void {
-    this.recienCreado.set(false);
-    this.miEquipo.set(equipo);
-    this.lista()?.recargar();
-  }
-
-  protected alAbandonar(): void {
-    this.recienCreado.set(false);
-    this.miEquipo.set(null);
-    this.lista()?.recargar();
   }
 }

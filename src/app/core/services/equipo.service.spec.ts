@@ -4,7 +4,6 @@ import { TestBed } from '@angular/core/testing';
 
 import { environment } from '../../../environments/environment';
 import { EquipoDetalle } from '../models/equipo.model';
-import { equipoDePrueba, paginaDePrueba } from '../testing/datos-prueba';
 import { EquipoService } from './equipo.service';
 
 describe('EquipoService', () => {
@@ -72,69 +71,5 @@ describe('EquipoService', () => {
     http.expectOne(`${environment.apiUrl}/equipos/mio`).flush(null, { status: 204, statusText: 'No Content' });
 
     expect(recibido).toBeNull();
-  });
-
-  const base = `${environment.apiUrl}/equipos`;
-
-  it('listar envía page y size, y solo los filtros que tienen valor', () => {
-    servicio.listar({ tipo: 'FUTBOL_11', nombre: '  halcones ', conCupo: true }, 2, 12).subscribe();
-
-    const req = http.expectOne((r) => r.url === base);
-    expect(req.request.method).toBe('GET');
-    expect(req.request.params.get('page')).toBe('2');
-    expect(req.request.params.get('size')).toBe('12');
-    expect(req.request.params.get('tipo')).toBe('FUTBOL_11');
-    expect(req.request.params.get('nombre')).toBe('halcones');
-    expect(req.request.params.get('conCupo')).toBe('true');
-    req.flush(paginaDePrueba([equipoDePrueba()]));
-  });
-
-  it('listar sin filtros no manda tipo, nombre ni conCupo', () => {
-    servicio.listar({ tipo: '', nombre: '  ', conCupo: false }, 0, 12).subscribe();
-
-    const req = http.expectOne((r) => r.url === base);
-    expect(req.request.params.keys().sort()).toEqual(['page', 'size']);
-    req.flush(paginaDePrueba([]));
-  });
-
-  it('editar envía PATCH /equipos/{id} con los cambios', () => {
-    servicio.editar(4, { nombre: 'Nuevo' }).subscribe();
-
-    const req = http.expectOne(`${base}/4`);
-    expect(req.request.method).toBe('PATCH');
-    expect(req.request.body).toEqual({ nombre: 'Nuevo' });
-    req.flush(equipoDePrueba());
-  });
-
-  it('unirse envía POST /equipos/{id}/miembros', () => {
-    servicio.unirse(4).subscribe();
-
-    const req = http.expectOne(`${base}/4/miembros`);
-    expect(req.request.method).toBe('POST');
-    req.flush(equipoDePrueba());
-  });
-
-  it('agregarAmigo envía POST /equipos/{id}/miembros/{usuarioId}', () => {
-    servicio.agregarAmigo(4, 9).subscribe();
-
-    const req = http.expectOne(`${base}/4/miembros/9`);
-    expect(req.request.method).toBe('POST');
-    req.flush(equipoDePrueba());
-  });
-
-  it('abandonar envía DELETE /equipos/{id}/miembros/me', () => {
-    servicio.abandonar(4).subscribe();
-
-    const req = http.expectOne(`${base}/4/miembros/me`);
-    expect(req.request.method).toBe('DELETE');
-    req.flush(null, { status: 204, statusText: 'No Content' });
-  });
-
-  it('eliminar envía DELETE /equipos/{id}', () => {
-    servicio.eliminar(4).subscribe();
-
-    const req = http.expectOne(`${base}/4`);
-    expect(req.request.method).toBe('DELETE');
-    req.flush(null, { status: 204, statusText: 'No Content' });
   });
 });

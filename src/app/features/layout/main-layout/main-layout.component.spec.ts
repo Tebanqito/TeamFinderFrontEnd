@@ -49,10 +49,10 @@ describe('MainLayoutComponent', () => {
     expect(navegar).toHaveBeenCalledWith(['/login']);
   });
 
-  it('el owner no ve la pestaña Amigos', () => {
+  it('el owner no ve la pestaña Amigos, pero sí Torneo', () => {
     const enlaces = Array.from(raiz.querySelectorAll('.tabs a')).map((a) => a.textContent?.trim());
 
-    expect(enlaces).toEqual(['Equipos']);
+    expect(enlaces).toEqual(['Equipos', 'Torneo']);
   });
 
   it('un usuario sí ve la pestaña Amigos', async () => {
@@ -60,6 +60,6 @@ describe('MainLayoutComponent', () => {
     await fixture.whenStable();
 
     const enlaces = Array.from(raiz.querySelectorAll('.tabs a')).map((a) => a.getAttribute('href'));
-    expect(enlaces).toEqual(['/equipos', '/amigos']);
+    expect(enlaces).toEqual(['/equipos', '/amigos', '/torneo']);
   });
 });

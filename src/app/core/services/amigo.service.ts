@@ -15,4 +15,9 @@ export class AmigoService {
   listar(): Observable<Amigo[]> {
     return this.http.get<Amigo[]>(`${environment.apiUrl}/amigos`);
   }
+
+  /** DELETE /amigos/{amigoId}: deja de ser amigo (la amistad se borra de los dos lados). */
+  eliminar(amigoId: number): Observable<void> {
+    return this.http.delete<void>(`${environment.apiUrl}/amigos/${amigoId}`);
+  }
 }

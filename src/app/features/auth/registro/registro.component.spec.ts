@@ -1,6 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
 
 import { environment } from '../../../../environments/environment';
 import { AuthService } from '../../../core/services/auth.service';
@@ -11,6 +12,7 @@ describe('RegistroComponent', () => {
   let fixture: ComponentFixture<RegistroComponent>;
   let http: HttpTestingController;
   let raiz: HTMLElement;
+  const navegar = vi.fn();
 
   const escribir = async (campo: string, valor: string) => {
     const input = raiz.querySelector<HTMLInputElement>(`input[name="${campo}"]`)!;
@@ -32,9 +34,11 @@ describe('RegistroComponent', () => {
 
   beforeEach(async () => {
     localStorage.clear();
+    navegar.mockReset();
+    navegar.mockResolvedValue(true);
     await TestBed.configureTestingModule({
       imports: [RegistroComponent],
-      providers: [provideHttpClient(), provideHttpClientTesting()],
+      providers: [provideHttpClient(), provideHttpClientTesting(), { provide: Router, useValue: { navigate: navegar } }],
     }).compileComponents();
 
     http = TestBed.inject(HttpTestingController);
@@ -91,6 +95,7 @@ describe('RegistroComponent', () => {
 
     expect(localStorage.getItem('token')).toBe('abc123');
     expect(TestBed.inject(AuthService).sesion()?.email).toBe('juan@mail.com');
+    expect(navegar).toHaveBeenCalledWith(['/equipos']);
   });
 
   it('muestra debajo del email el 409 de email repetido', async () => {
@@ -140,6 +145,7 @@ describe('RegistroComponent', () => {
     await fixture.whenStable();
 
     expect(raiz.textContent).toContain('No se pudo conectar con el servidor');
+    expect(navegar).not.toHaveBeenCalled();
   });
 
   it('vuelve a habilitar el botón después de un error', async () => {

@@ -1,6 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
 
 import { environment } from '../../../../environments/environment';
 import { AuthService } from '../../../core/services/auth.service';
@@ -11,6 +12,7 @@ describe('LoginComponent', () => {
   let fixture: ComponentFixture<LoginComponent>;
   let http: HttpTestingController;
   let raiz: HTMLElement;
+  const navegar = vi.fn();
 
   const escribir = async (campo: string, valor: string) => {
     const input = raiz.querySelector<HTMLInputElement>(`input[name="${campo}"]`)!;
@@ -31,9 +33,11 @@ describe('LoginComponent', () => {
 
   beforeEach(async () => {
     localStorage.clear();
+    navegar.mockReset();
+    navegar.mockResolvedValue(true);
     await TestBed.configureTestingModule({
       imports: [LoginComponent],
-      providers: [provideHttpClient(), provideHttpClientTesting()],
+      providers: [provideHttpClient(), provideHttpClientTesting(), { provide: Router, useValue: { navigate: navegar } }],
     }).compileComponents();
 
     http = TestBed.inject(HttpTestingController);
@@ -79,6 +83,7 @@ describe('LoginComponent', () => {
     expect(sesion?.email).toBe('juan@mail.com');
     expect(sesion?.rol).toBe('OWNER');
     expect(localStorage.getItem('token')).toBe('abc123');
+    expect(navegar).toHaveBeenCalledWith(['/equipos']);
   });
 
   it('muestra "Credenciales inválidas" cuando la API responde 401', async () => {
@@ -115,6 +120,7 @@ describe('LoginComponent', () => {
     await fixture.whenStable();
 
     expect(raiz.textContent).toContain('No se pudo conectar con el servidor');
+    expect(navegar).not.toHaveBeenCalled();
   });
 
   it('vuelve a habilitar el botón después de un error', async () => {

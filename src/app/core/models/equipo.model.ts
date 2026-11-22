@@ -32,3 +32,16 @@ export interface EquipoDetalle {
   cantidadMiembros: number;
   miembros: UsuarioResumen[];
 }
+
+/** Filtros del listado de equipos (GET /equipos). */
+export interface FiltrosEquipos {
+  tipo: '' | TipoEquipo;
+  nombre: string;
+  conCupo: boolean;
+}
+
+/** Cuerpo de PATCH /equipos/{id}: solo se envía lo que cambia. */
+export interface EquipoEditarRequest {
+  nombre?: string;
+  descripcion?: string;
+}

@@ -57,7 +57,9 @@ label {
   color: var(--muted);
 }
 
-input {
+input,
+select,
+textarea {
   width: 100%;
   padding: 0.55rem 0.7rem;
   border: 1px solid var(--line);
@@ -67,7 +69,13 @@ input {
   font: inherit;
 }
 
-input:focus-visible {
+textarea {
+  resize: vertical;
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
   outline: 2px solid var(--celeste);
   outline-offset: 1px;
 }
@@ -111,7 +119,9 @@ input:focus-visible {
   width: 100%;
 }
 
-input.invalido {
+input.invalido,
+textarea.invalido,
+select.invalido {
   border-color: var(--bad);
 }
 
@@ -126,4 +136,112 @@ input.invalido {
   padding: 0.5rem 0.7rem;
   border: 1px solid var(--bad);
   border-radius: 8px;
+}
+
+.btn.sm {
+  padding: 0.25rem 0.7rem;
+  font-size: 0.9rem;
+}
+
+.pagina {
+  display: grid;
+  gap: 1.2rem;
+}
+
+.card {
+  min-width: 0;
+  padding: 1.3rem 1.5rem;
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--celeste);
+  border-radius: 10px;
+  background: var(--card);
+}
+
+.card.gold h2::after {
+  content: '';
+  display: block;
+  width: 48px;
+  height: 4px;
+  margin-top: 4px;
+  background: var(--gold);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.badge {
+  display: inline-block;
+  padding: 0 0.5rem;
+  border-radius: 4px;
+  background: var(--navy);
+  color: #fff;
+  font-family: var(--fuente-titulos);
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+
+.badge.g {
+  background: var(--gold);
+  color: var(--navy);
+}
+
+.chip {
+  display: inline-block;
+  margin: 0.3rem 0.4rem 0.3rem 0;
+  padding: 0.25rem 0.9rem;
+  border-radius: 99px;
+  background: var(--chip);
+  font-size: 0.95rem;
+}
+
+.bar {
+  height: 8px;
+  margin: 0.4rem 0;
+  overflow: hidden;
+  border-radius: 9px;
+  background: var(--chip);
+}
+
+.bar i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--celeste), var(--gold));
+}
+
+.grilla {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.btn.alt {
+  background: var(--gold);
+  color: var(--navy);
+}
+
+.btn.bad {
+  background: var(--bad);
+  color: #fff;
+}
+
+.confirmacion {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--bad);
+  border-radius: 8px;
+}
+
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
 }

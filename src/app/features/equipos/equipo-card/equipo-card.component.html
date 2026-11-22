@@ -1,0 +1,35 @@
+<article class="card">
+  <h3>
+    {{ equipo().nombre }}
+    <span class="badge">{{ tipo() }}</span>
+  </h3>
+  <p>{{ equipo().descripcion }}</p>
+  <div class="bar"><i [style.width.%]="porcentajeCupo()"></i></div>
+  <small>{{ equipo().cantidadMiembros }}/{{ equipo().cupo }} integrantes</small>
+  <div>
+    @for (miembro of equipo().miembros; track miembro.id) {
+      <span class="chip">{{ miembro.nombre }}</span>
+    }
+  </div>
+
+  @if (puedeUnirse() || puedeEliminar()) {
+    <div class="acciones">
+      @if (puedeUnirse()) {
+        <button class="btn sm" type="button" [disabled]="ocupado() || completo()" (click)="unirse.emit(equipo())">
+          {{ completo() ? 'Equipo completo' : 'Unirme' }}
+        </button>
+      }
+      @if (puedeEliminar() && !confirmando()) {
+        <button class="btn bad sm" type="button" [disabled]="ocupado()" (click)="confirmando.set(true)">Eliminar</button>
+      }
+    </div>
+  }
+
+  @if (confirmando()) {
+    <div class="confirmacion" role="alertdialog" aria-label="Confirmar eliminación">
+      <span>¿Eliminar "{{ equipo().nombre }}"? Sus integrantes quedarán sin equipo.</span>
+      <button class="btn bad sm" type="button" [disabled]="ocupado()" (click)="confirmarEliminar()">Sí, eliminar</button>
+      <button class="btn out sm" type="button" (click)="confirmando.set(false)">Cancelar</button>
+    </div>
+  }
+</article>

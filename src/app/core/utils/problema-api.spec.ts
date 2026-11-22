@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 
-import { leerProblema } from './problema-api';
+import { MENSAJE_SIN_CONEXION, leerProblema, mensajeDeError } from './problema-api';
 
 describe('leerProblema', () => {
   it('detecta que no hay conexión cuando el status es 0', () => {
@@ -28,5 +28,12 @@ describe('leerProblema', () => {
 
     expect(problema.detalle).toContain('error inesperado');
     expect(problema.errores).toBeNull();
+  });
+
+  it('mensajeDeError devuelve el detalle de la API, o el aviso de sin conexión', () => {
+    expect(mensajeDeError(new HttpErrorResponse({ status: 409, error: { detail: 'Ya existe un equipo con ese nombre' } }))).toBe(
+      'Ya existe un equipo con ese nombre',
+    );
+    expect(mensajeDeError(new HttpErrorResponse({ status: 0 }))).toBe(MENSAJE_SIN_CONEXION);
   });
 });

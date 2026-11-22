@@ -1,0 +1,22 @@
+.campos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0.8rem;
+}
+
+.fila {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 0.6rem;
+  margin-top: 0.8rem;
+}
+
+.fila label {
+  flex: 1 1 220px;
+}
+
+.formulario .btn {
+  width: auto;
+  justify-self: start;
+}

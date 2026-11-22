@@ -1,0 +1,30 @@
+.filtros {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.8rem;
+  align-items: end;
+  margin-bottom: 1rem;
+}
+
+.filtros .check {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filtros .check input {
+  width: auto;
+}
+
+.filtros .btn {
+  width: auto;
+  justify-self: start;
+}
+
+.paginacion {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}

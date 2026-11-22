@@ -1,0 +1,67 @@
+<section class="card gold">
+  <h2>Todos los equipos</h2>
+
+  <form class="filtros" (ngSubmit)="filtrar()">
+    <label>
+      Tipo
+      <select name="tipo" [(ngModel)]="formulario.tipo">
+        <option value="">Todos</option>
+        @for (opcion of tipos; track opcion.valor) {
+          <option [value]="opcion.valor">{{ opcion.nombre }}</option>
+        }
+      </select>
+    </label>
+    <label>
+      Nombre
+      <input name="nombre" type="text" maxlength="100" [(ngModel)]="formulario.nombre" />
+    </label>
+    <label class="check">
+      <input name="conCupo" type="checkbox" [(ngModel)]="formulario.conCupo" />
+      Solo con cupo
+    </label>
+    <button class="btn sm" type="submit">Filtrar</button>
+  </form>
+
+  @if (errorCarga(); as mensaje) {
+    <p class="error general" role="alert">{{ mensaje }}</p>
+    <button class="btn out sm reintentar" type="button" (click)="recargar()">Reintentar</button>
+  } @else if (!pagina()) {
+    <p class="muted" role="status">Cargando equipos...</p>
+  } @else {
+    @if (pagina(); as p) {
+      @if (p.contenido.length === 0) {
+        <p class="muted">No hay equipos que coincidan con la búsqueda.</p>
+      } @else {
+        <div class="grilla" [attr.aria-busy]="cargando()">
+          @for (equipo of p.contenido; track equipo.id) {
+            <app-equipo-card
+              [equipo]="equipo"
+              [puedeUnirse]="puedeUnirse()"
+              [puedeEliminar]="puedeEliminar()"
+              [ocupado]="ocupadoId() !== null"
+              (unirse)="unirse($event)"
+              (eliminar)="eliminar($event)"
+            />
+          }
+        </div>
+      }
+
+      @if (p.totalPaginas > 1) {
+        <nav class="paginacion" aria-label="Paginación">
+          <button class="btn out sm" type="button" [disabled]="p.pagina === 0 || cargando()" (click)="irA(p.pagina - 1)">
+            Anterior
+          </button>
+          <span>Página {{ p.pagina + 1 }} de {{ p.totalPaginas }}</span>
+          <button
+            class="btn out sm"
+            type="button"
+            [disabled]="p.pagina + 1 >= p.totalPaginas || cargando()"
+            (click)="irA(p.pagina + 1)"
+          >
+            Siguiente
+          </button>
+        </nav>
+      }
+    }
+  }
+</section>

@@ -20,3 +20,9 @@ export function leerProblema(err: HttpErrorResponse): ProblemaApi {
     errores: cuerpo.errores ?? null,
   };
 }
+
+/** Mensaje listo para mostrar al usuario ante cualquier error de la API. */
+export function mensajeDeError(err: HttpErrorResponse): string {
+  const problema = leerProblema(err);
+  return problema.sinConexion ? MENSAJE_SIN_CONEXION : problema.detalle;
+}

@@ -1,0 +1,11 @@
+<section class="card">
+  <h3>Mis amigos</h3>
+  @for (amigo of amigos(); track amigo.id) {
+    <p>
+      {{ amigo.nombre }}
+      <button class="btn sm out" type="button" [disabled]="quitandoId() !== null" (click)="quitar(amigo)">Quitar</button>
+    </p>
+  } @empty {
+    <p class="muted">Todavía no tenés amigos.</p>
+  }
+</section>

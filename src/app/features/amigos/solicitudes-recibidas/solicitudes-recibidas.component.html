@@ -1,0 +1,16 @@
+<section class="card">
+  <h3>Solicitudes recibidas</h3>
+  @for (solicitud of solicitudes(); track solicitud.id) {
+    <p>
+      {{ solicitud.remitente.nombre }}
+      <button class="btn sm" type="button" [disabled]="respondiendoId() !== null" (click)="responder(solicitud, 'ACEPTADA')">
+        Aceptar
+      </button>
+      <button class="btn sm out" type="button" [disabled]="respondiendoId() !== null" (click)="responder(solicitud, 'RECHAZADA')">
+        Rechazar
+      </button>
+    </p>
+  } @empty {
+    <p class="muted">No tenés solicitudes pendientes.</p>
+  }
+</section>

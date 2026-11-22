@@ -1,0 +1,14 @@
+form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 0.8rem;
+}
+
+label {
+  flex: 1 1 260px;
+}
+
+.btn {
+  width: auto;
+}

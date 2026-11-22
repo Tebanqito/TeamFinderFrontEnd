@@ -3,6 +3,8 @@ import { Routes } from '@angular/router';
 import { authGuard, sinSesionGuard } from './core/guards/auth.guard';
 import { soloUsuarioGuard } from './core/guards/usuario.guard';
 import { AmigosComponent } from './features/amigos/amigos/amigos.component';
+import { TorneoHistorialComponent } from './features/torneos/torneo-historial/torneo-historial.component';
+import { TorneosComponent } from './features/torneos/torneos/torneos.component';
 import { EquiposComponent } from './features/equipos/equipos/equipos.component';
 import { AuthLayoutComponent } from './features/auth/auth-layout/auth-layout.component';
 import { LoginComponent } from './features/auth/login/login.component';
@@ -31,6 +33,8 @@ export const routes: Routes = [
     children: [
       { path: 'equipos', component: EquiposComponent },
       { path: 'amigos', component: AmigosComponent, canActivate: [soloUsuarioGuard] },
+      { path: 'torneo', component: TorneosComponent },
+      { path: 'torneo/historial/:id', component: TorneoHistorialComponent },
     ],
   },
 

@@ -1,0 +1,44 @@
+<div class="llaves">
+  @for (ronda of llave().rondas; track ronda.numero; let k = $index) {
+    <div class="col">
+      <h3 class="rt">{{ ronda.nombre }}</h3>
+      <div class="ronda">
+        @for (cruce of ronda.cruces; track cruce.posicion; let i = $index) {
+          <div
+            class="mw"
+            [class.n]="k < llave().rondas.length - 1"
+            [class.k]="k > 0"
+            [style.grid-row]="'span ' + potenciaDeDos(k)"
+          >
+            @if (k < llave().rondas.length - 1) {
+              <i class="v" [class.u]="i % 2 === 1" [class.d]="i % 2 === 0"></i>
+            }
+            <div class="m">
+              <div class="t" [class.w]="estado(cruce, cruce.equipoUno) === 'w'" [class.l]="estado(cruce, cruce.equipoUno) === 'l'" [class.x]="!cruce.equipoUno">
+                {{ cruce.equipoUno ? cruce.equipoUno.nombre : textoVacio(cruce) }}
+              </div>
+              <div class="t" [class.w]="estado(cruce, cruce.equipoDos) === 'w'" [class.l]="estado(cruce, cruce.equipoDos) === 'l'" [class.x]="!cruce.equipoDos">
+                {{ cruce.equipoDos ? cruce.equipoDos.nombre : textoVacio(cruce) }}
+              </div>
+
+              @if (puedeEditar(cruce)) {
+                <div class="acc">
+                  @if (cruce.partidoId !== null) {
+                    <button class="btn sm out" type="button" (click)="borrar.emit(cruce)">Borrar resultado</button>
+                  } @else {
+                    <button class="btn sm" type="button" [title]="'Ganó ' + cruce.equipoUno!.nombre" (click)="ganador.emit({ cruce, ganador: cruce.equipoUno! })">
+                      {{ cruce.equipoUno!.nombre }}
+                    </button>
+                    <button class="btn sm" type="button" [title]="'Ganó ' + cruce.equipoDos!.nombre" (click)="ganador.emit({ cruce, ganador: cruce.equipoDos! })">
+                      {{ cruce.equipoDos!.nombre }}
+                    </button>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

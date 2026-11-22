@@ -1,0 +1,64 @@
+@if (cargando()) {
+  <section class="card">
+    <p class="muted" role="status">Cargando el torneo...</p>
+  </section>
+} @else if (errorCarga(); as mensaje) {
+  <section class="card gold">
+    <h2>Torneo</h2>
+    <p class="error general" role="alert">{{ mensaje }}</p>
+    <button class="btn out sm reintentar" type="button" (click)="cargar()">Reintentar</button>
+  </section>
+} @else if (torneo(); as t) {
+  <section class="card gold">
+    <h2>
+      {{ t.nombre }}
+      <span class="badge g">{{ t.estado }}</span>
+    </h2>
+    <p>{{ t.tipo === 'FUTBOL_5' ? 'Fútbol 5' : 'Fútbol 11' }} · {{ t.cantidadEquipos }} equipos sorteados</p>
+    <div>
+      @for (equipo of t.equipos; track equipo.id) {
+        <span class="chip">{{ equipo.nombre }}</span>
+      }
+    </div>
+
+    @if (esOwner() && !confirmandoFin()) {
+      <button class="btn sm bad" type="button" style="margin-top: 0.6rem" (click)="confirmandoFin.set(true)">
+        Finalizar torneo
+      </button>
+    }
+    @if (confirmandoFin()) {
+      <div class="confirmacion" role="alertdialog" aria-label="Confirmar finalización">
+        <span>¿Finalizar "{{ t.nombre }}"? Después no se pueden cargar más resultados.</span>
+        <button class="btn bad sm" type="button" [disabled]="finalizando()" (click)="finalizar()">
+          {{ finalizando() ? 'Finalizando...' : 'Sí, finalizar' }}
+        </button>
+        <button class="btn out sm" type="button" [disabled]="finalizando()" (click)="confirmandoFin.set(false)">Cancelar</button>
+      </div>
+    }
+  </section>
+
+  @if (llave(); as l) {
+    @if (l.campeon; as campeon) {
+      <section class="card gold">
+        <h2><span class="badge g">Campeón</span> {{ campeon.nombre }}</h2>
+      </section>
+    }
+    <section class="card">
+      <h3>Llaves</h3>
+      <app-llaves
+        [llave]="l"
+        [editable]="esOwner() && !guardando()"
+        (ganador)="cargarResultado($event)"
+        (borrar)="borrarResultado($event)"
+      />
+    </section>
+  }
+} @else {
+  <section class="card gold">
+    <h2>Torneo</h2>
+    <p class="muted">No hay un torneo activo.</p>
+  </section>
+  @if (esOwner()) {
+    <app-torneo-crear (creado)="alCrear()" />
+  }
+}

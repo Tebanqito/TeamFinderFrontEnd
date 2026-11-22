@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule, NgForm, NgModel } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { RegistroRequest } from '../../../core/models/auth.model';
 import { AuthService } from '../../../core/services/auth.service';
@@ -16,6 +17,7 @@ type ErroresPorCampo = Partial<Record<keyof RegistroRequest, string>>;
 })
 export class RegistroComponent {
   private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
   protected readonly datos: RegistroRequest = { nombre: '', email: '', password: '' };
 
@@ -23,7 +25,7 @@ export class RegistroComponent {
   protected readonly errorGeneral = signal<string | null>(null);
   protected readonly erroresApi = signal<ErroresPorCampo>({});
 
-  /** Al registrarse, el servicio guarda la sesión y el layout muestra la confirmación. */
+  /** Al registrarse, el servicio guarda la sesión y se pasa a la pantalla de equipos. */
   protected enviar(formulario: NgForm): void {
     this.errorGeneral.set(null);
     this.erroresApi.set({});
@@ -41,7 +43,10 @@ export class RegistroComponent {
         password: this.datos.password,
       })
       .subscribe({
-        next: () => this.enviando.set(false),
+        next: () => {
+          this.enviando.set(false);
+          void this.router.navigate(['/equipos']);
+        },
         error: (err: HttpErrorResponse) => {
           this.enviando.set(false);
           this.mostrarError(err);

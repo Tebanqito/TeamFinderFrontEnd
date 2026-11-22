@@ -1,10 +1,63 @@
 <section class="card gold">
   <h2>Mi equipo</h2>
-  <h3>
-    {{ equipo().nombre }}
-    <span class="badge">{{ tipo() }}</span>
-  </h3>
-  <p>{{ equipo().descripcion }}</p>
+
+  @if (editando()) {
+    <form #f="ngForm" class="formulario" novalidate (ngSubmit)="guardar(f)">
+      <div class="campos">
+        <div>
+          <label>
+            Nombre
+            <input
+              name="nombre"
+              type="text"
+              maxlength="100"
+              required
+              [(ngModel)]="cambios.nombre"
+              (ngModelChange)="errorNombre.set(null)"
+              [class.invalido]="errorNombre() || (f.submitted && !cambios.nombre.trim())"
+            />
+          </label>
+          @if (errorNombre(); as mensaje) {
+            <p class="error" role="alert">{{ mensaje }}</p>
+          } @else if (f.submitted && !cambios.nombre.trim()) {
+            <p class="error" role="alert">El nombre es obligatorio</p>
+          }
+        </div>
+        <div>
+          <label>
+            Descripción
+            <textarea
+              name="descripcion"
+              rows="3"
+              maxlength="500"
+              required
+              [(ngModel)]="cambios.descripcion"
+              [class.invalido]="f.submitted && !cambios.descripcion.trim()"
+            ></textarea>
+          </label>
+          @if (f.submitted && !cambios.descripcion.trim()) {
+            <p class="error" role="alert">La descripción es obligatoria</p>
+          }
+        </div>
+      </div>
+      @if (errorEdicion(); as mensaje) {
+        <p class="error general" role="alert">{{ mensaje }}</p>
+      }
+      <div class="acciones">
+        <button class="btn sm" type="submit" [disabled]="guardando()">
+          {{ guardando() ? 'Guardando...' : 'Guardar cambios' }}
+        </button>
+        <button class="btn out sm" type="button" [disabled]="guardando()" (click)="editando.set(false)">Cancelar</button>
+      </div>
+    </form>
+  } @else {
+    <h3>
+      {{ equipo().nombre }}
+      <span class="badge">{{ tipo() }}</span>
+    </h3>
+    <p>{{ equipo().descripcion }}</p>
+  }
+
   <div class="bar"><i [style.width.%]="porcentajeCupo()"></i></div>
   <small>{{ equipo().cantidadMiembros }}/{{ equipo().cupo }} integrantes</small>
   <div>
@@ -12,4 +65,59 @@
       <span class="chip">{{ miembro.nombre }}</span>
     }
   </div>
+
+  @if (!editando()) {
+    <div class="acciones">
+      <button class="btn sm" type="button" (click)="empezarEdicion()">Editar</button>
+      @if (!completo() && !agregando()) {
+        <button class="btn alt sm" type="button" (click)="abrirAgregarAmigo()">Agregar amigo</button>
+      }
+      @if (!confirmandoSalida()) {
+        <button class="btn bad sm" type="button" (click)="confirmandoSalida.set(true)">Abandonar equipo</button>
+      }
+    </div>
+  }
+
+  @if (agregando()) {
+    <div class="fila">
+      @if (cargandoAmigos()) {
+        <p class="muted" role="status">Buscando tus amigos...</p>
+      } @else if (amigosDisponibles().length === 0 && !errorAmigos()) {
+        <p class="muted">No tenés amigos sin equipo para sumar.</p>
+        <button class="btn out sm" type="button" (click)="agregando.set(false)">Cerrar</button>
+      } @else {
+        <label>
+          Amigo
+          <select name="amigo" [(ngModel)]="amigoElegido">
+            <option [ngValue]="null">Elegí un amigo</option>
+            @for (amigo of amigosDisponibles(); track amigo.id) {
+              <option [ngValue]="amigo.id">{{ amigo.nombre }}</option>
+            }
+          </select>
+        </label>
+        <button class="btn sm" type="button" [disabled]="amigoElegido === null || sumando()" (click)="sumarAmigo()">
+          {{ sumando() ? 'Sumando...' : 'Sumar al equipo' }}
+        </button>
+        <button class="btn out sm" type="button" (click)="agregando.set(false)">Cancelar</button>
+      }
+    </div>
+    @if (errorAmigos(); as mensaje) {
+      <p class="error general" role="alert">{{ mensaje }}</p>
+    }
+  }
+
+  @if (confirmandoSalida()) {
+    <div class="confirmacion" role="alertdialog" aria-label="Confirmar salida">
+      <span>¿Seguro que querés abandonar "{{ equipo().nombre }}"?</span>
+      <button class="btn bad sm" type="button" [disabled]="saliendo()" (click)="abandonar()">
+        {{ saliendo() ? 'Saliendo...' : 'Sí, abandonar' }}
+      </button>
+      <button class="btn out sm" type="button" [disabled]="saliendo()" (click)="confirmandoSalida.set(false); errorSalida.set(null)">
+        Cancelar
+      </button>
+    </div>
+    @if (errorSalida(); as mensaje) {
+      <p class="error general" role="alert">{{ mensaje }}</p>
+    }
+  }
 </section>

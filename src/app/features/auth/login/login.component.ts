@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule, NgForm, NgModel } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { LoginRequest } from '../../../core/models/auth.model';
 import { AuthService } from '../../../core/services/auth.service';
@@ -16,6 +17,7 @@ type ErroresPorCampo = Partial<Record<keyof LoginRequest, string>>;
 })
 export class LoginComponent {
   private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
   protected readonly datos: LoginRequest = { email: '', password: '' };
 
@@ -23,7 +25,7 @@ export class LoginComponent {
   protected readonly errorGeneral = signal<string | null>(null);
   protected readonly erroresApi = signal<ErroresPorCampo>({});
 
-  /** Si las credenciales son correctas, el servicio guarda la sesión y el layout muestra la confirmación. */
+  /** Si las credenciales son correctas, el servicio guarda la sesión y se pasa a la pantalla de equipos. */
   protected enviar(formulario: NgForm): void {
     this.errorGeneral.set(null);
     this.erroresApi.set({});
@@ -35,7 +37,10 @@ export class LoginComponent {
 
     this.enviando.set(true);
     this.authService.login({ email: this.datos.email.trim(), password: this.datos.password }).subscribe({
-      next: () => this.enviando.set(false),
+      next: () => {
+          this.enviando.set(false);
+          void this.router.navigate(['/equipos']);
+        },
       error: (err: HttpErrorResponse) => {
         this.enviando.set(false);
         this.mostrarError(err);

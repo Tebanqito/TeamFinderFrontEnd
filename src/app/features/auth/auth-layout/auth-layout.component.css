@@ -52,28 +52,3 @@
   background: var(--gold);
   color: var(--navy);
 }
-
-.sesion {
-  padding: 0.8rem 1rem;
-  border: 1px solid var(--ok);
-  border-radius: 8px;
-}
-
-.sesion h2 {
-  color: var(--ok);
-}
-
-.sesion p {
-  margin: 0 0 0.5rem;
-}
-
-.rol {
-  display: inline-block;
-  padding: 0 0.5rem;
-  border-radius: 4px;
-  background: var(--gold);
-  color: var(--navy);
-  font-family: var(--fuente-titulos);
-  font-size: 0.85rem;
-  font-weight: 800;
-}

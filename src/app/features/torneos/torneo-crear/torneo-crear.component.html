@@ -1,0 +1,53 @@
+<section class="card gold">
+  <h2>Crear torneo</h2>
+  <form #f="ngForm" novalidate (ngSubmit)="enviar(f)">
+    <div>
+      <label>
+        Nombre
+        <input
+          name="nombre"
+          type="text"
+          maxlength="100"
+          required
+          [(ngModel)]="datos.nombre"
+          [class.invalido]="f.submitted && !datos.nombre.trim()"
+        />
+      </label>
+      @if (f.submitted && !datos.nombre.trim()) {
+        <p class="error" role="alert">El nombre es obligatorio</p>
+      }
+    </div>
+
+    <div>
+      <label>
+        Tipo
+        <select name="tipo" [(ngModel)]="datos.tipo">
+          @for (opcion of tipos; track opcion.valor) {
+            <option [ngValue]="opcion.valor">{{ opcion.nombre }}</option>
+          }
+        </select>
+      </label>
+    </div>
+
+    <div>
+      <label>
+        Cantidad de equipos
+        <input
+          name="cantidadEquipos"
+          type="number"
+          min="2"
+          required
+          [(ngModel)]="datos.cantidadEquipos"
+          [class.invalido]="f.submitted && !cantidadValida()"
+        />
+      </label>
+      @if (f.submitted && !cantidadValida()) {
+        <p class="error" role="alert">El torneo necesita al menos 2 equipos</p>
+      }
+    </div>
+
+    <button class="btn" type="submit" [disabled]="enviando()">
+      {{ enviando() ? 'Sorteando...' : 'Sortear y crear' }}
+    </button>
+  </form>
+</section>

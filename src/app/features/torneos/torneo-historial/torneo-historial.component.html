@@ -1,0 +1,33 @@
+<div class="pagina">
+  @if (cargando()) {
+    <section class="card">
+      <p class="muted" role="status">Cargando las llaves...</p>
+    </section>
+  } @else if (errorCarga(); as mensaje) {
+    <section class="card gold">
+      <h2>Torneo</h2>
+      <p class="error general" role="alert">{{ mensaje }}</p>
+      <button class="btn out sm" type="button" (click)="cargar()">Reintentar</button>
+      <button class="btn out sm" type="button" (click)="volver()">← Volver al historial</button>
+    </section>
+  } @else if (torneo(); as t) {
+    <section class="card gold">
+      <h2>
+        {{ t.nombre }}
+        <span class="badge">{{ t.estado === 'FINALIZADO' ? 'Finalizado' : 'Activo' }}</span>
+      </h2>
+      <p>{{ tipo(t.tipo) }} · {{ t.equipos.length }} equipos</p>
+      @if (llave()?.campeon; as campeon) {
+        <p><span class="badge g">Campeón</span> <b>{{ campeon.nombre }}</b></p>
+      }
+      <button class="btn sm out" type="button" (click)="volver()">← Volver al historial</button>
+    </section>
+
+    @if (llave(); as l) {
+      <section class="card">
+        <h3>Llaves</h3>
+        <app-llaves [llave]="l" />
+      </section>
+    }
+  }
+</div>

@@ -1,0 +1,36 @@
+<section class="card gold">
+  <h2>Historial de torneos</h2>
+
+  @if (errorCarga(); as mensaje) {
+    <p class="error general" role="alert">{{ mensaje }}</p>
+    <button class="btn out sm reintentar" type="button" (click)="recargar()">Reintentar</button>
+  } @else if (!pagina()) {
+    <p class="muted" role="status">Cargando el historial...</p>
+  } @else if (pagina(); as p) {
+    @for (torneo of p.contenido; track torneo.id) {
+      <div class="ur">
+        <b>{{ torneo.nombre }}</b>
+        <span class="badge">{{ tipo(torneo.tipo) }}</span>
+        <span class="muted">{{ torneo.cantidadEquipos }} equipos</span>
+        @if (torneo.campeon; as campeon) {
+          <span>Campeón: {{ campeon.nombre }}</span>
+        } @else {
+          <span class="muted">Sin campeón definido</span>
+        }
+        <button class="btn sm alt" type="button" (click)="verLlaves(torneo)">Ver llaves</button>
+      </div>
+    } @empty {
+      <p class="muted">Todavía no hay torneos finalizados.</p>
+    }
+
+    @if (p.totalPaginas > 1) {
+      <nav class="paginacion" aria-label="Paginación del historial">
+        <button class="btn out sm" type="button" [disabled]="p.pagina === 0 || cargando()" (click)="irA(p.pagina - 1)">Anterior</button>
+        <span>Página {{ p.pagina + 1 }} de {{ p.totalPaginas }}</span>
+        <button class="btn out sm" type="button" [disabled]="p.pagina + 1 >= p.totalPaginas || cargando()" (click)="irA(p.pagina + 1)">
+          Siguiente
+        </button>
+      </nav>
+    }
+  }
+</section>

@@ -1,0 +1,23 @@
+<section class="card gold">
+  <h2>Agregar amigo</h2>
+  <form #f="ngForm" novalidate (ngSubmit)="enviar(f)">
+    <label>
+      Nombre del usuario
+      <input
+        name="nombre"
+        type="text"
+        maxlength="50"
+        required
+        [(ngModel)]="nombre"
+        #campo="ngModel"
+        [class.invalido]="f.submitted && !nombre.trim()"
+      />
+      @if (f.submitted && !nombre.trim()) {
+        <span class="error" role="alert">Escribí el nombre del usuario</span>
+      }
+    </label>
+    <button class="btn" type="submit" [disabled]="enviando()">
+      {{ enviando() ? 'Enviando...' : 'Enviar solicitud' }}
+    </button>
+  </form>
+</section>

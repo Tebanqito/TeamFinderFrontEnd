@@ -1,0 +1,27 @@
+<header class="top">
+  <a class="marca" routerLink="/equipos">
+    <img class="logo" src="img/logo.png" alt="Logo de MatchFinder" />
+    <span class="nombre">MatchFinder</span>
+  </a>
+
+  <nav class="tabs" aria-label="Principal">
+    <a class="tab" routerLink="/equipos" routerLinkActive="activa">Equipos</a>
+    @if (authService.sesion()?.rol !== 'OWNER') {
+      <a class="tab" routerLink="/amigos" routerLinkActive="activa">Amigos</a>
+    }
+  </nav>
+
+  @if (authService.sesion(); as sesion) {
+    <span class="usuario">
+      {{ sesion.email }}
+      <span class="badge g">{{ sesion.rol }}</span>
+    </span>
+  }
+  <button class="btn out sm" type="button" (click)="salir()">Salir</button>
+</header>
+
+<main class="contenido">
+  <router-outlet />
+</main>
+
+<app-notificaciones />

@@ -1,0 +1,11 @@
+<section class="card">
+  <h3>Solicitudes enviadas</h3>
+  @for (solicitud of solicitudes(); track solicitud.id) {
+    <p>
+      {{ solicitud.destinatario.nombre }}
+      <span class="badge">{{ solicitud.estado }}</span>
+    </p>
+  } @empty {
+    <p class="muted">Todavía no enviaste solicitudes.</p>
+  }
+</section>

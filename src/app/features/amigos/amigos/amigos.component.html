@@ -1,0 +1,18 @@
+<div class="pagina">
+  <app-amigo-agregar (enviada)="cargar()" />
+
+  @if (cargando()) {
+    <section class="card">
+      <p class="muted" role="status">Cargando tus amigos...</p>
+    </section>
+  } @else if (errorCarga(); as mensaje) {
+    <section class="card gold">
+      <p class="error general" role="alert">{{ mensaje }}</p>
+      <button class="btn out sm reintentar" type="button" (click)="cargar()">Reintentar</button>
+    </section>
+  } @else {
+    <app-solicitudes-recibidas [solicitudes]="recibidas()" (respondida)="cargar()" />
+    <app-solicitudes-enviadas [solicitudes]="enviadas()" />
+    <app-amigos-lista [amigos]="amigos()" (quitado)="cargar()" />
+  }
+</div>

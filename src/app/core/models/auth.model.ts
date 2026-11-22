@@ -16,6 +16,7 @@ export interface AuthResponse {
   accessToken: string;
   tokenType: string;
   email: string;
+  nombre: string;
   rol: string;
 }
 
@@ -23,5 +24,7 @@ export interface AuthResponse {
 export interface Sesion {
   token: string;
   email: string;
+  /** Nombre de usuario; puede faltar en una sesión guardada por una versión anterior. */
+  nombre?: string;
   rol: string;
 }

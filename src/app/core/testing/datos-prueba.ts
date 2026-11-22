@@ -1,3 +1,4 @@
+import { UsuarioDetalle } from '../models/usuario.model';
 import { Llave, Torneo, TorneoResumen } from '../models/torneo.model';
 import { SolicitudAmistad } from '../models/solicitud.model';
 import { Amigo } from '../models/amigo.model';
@@ -86,4 +87,8 @@ export function llaveDePrueba(cambios: Partial<Llave> = {}): Llave {
 
 export function torneoResumenDePrueba(cambios: Partial<TorneoResumen> = {}): TorneoResumen {
   return { id: 1, nombre: 'Copa Apertura', tipo: 'FUTBOL_5', cantidadEquipos: 4, estado: 'FINALIZADO', campeon: null, ...cambios };
+}
+
+export function usuarioDePrueba(cambios: Partial<UsuarioDetalle> = {}): UsuarioDetalle {
+  return { id: 3, nombre: 'juan', email: 'juan@mail.com', rol: 'USUARIO', equipoId: null, equipoNombre: null, ...cambios };
 }

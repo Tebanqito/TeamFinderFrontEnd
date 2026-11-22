@@ -1,10 +1,12 @@
 import { Routes } from '@angular/router';
 
 import { authGuard, sinSesionGuard } from './core/guards/auth.guard';
+import { soloOwnerGuard } from './core/guards/owner.guard';
 import { soloUsuarioGuard } from './core/guards/usuario.guard';
 import { AmigosComponent } from './features/amigos/amigos/amigos.component';
 import { TorneoHistorialComponent } from './features/torneos/torneo-historial/torneo-historial.component';
 import { TorneosComponent } from './features/torneos/torneos/torneos.component';
+import { UsuariosComponent } from './features/usuarios/usuarios/usuarios.component';
 import { EquiposComponent } from './features/equipos/equipos/equipos.component';
 import { AuthLayoutComponent } from './features/auth/auth-layout/auth-layout.component';
 import { LoginComponent } from './features/auth/login/login.component';
@@ -35,6 +37,7 @@ export const routes: Routes = [
       { path: 'amigos', component: AmigosComponent, canActivate: [soloUsuarioGuard] },
       { path: 'torneo', component: TorneosComponent },
       { path: 'torneo/historial/:id', component: TorneoHistorialComponent },
+      { path: 'usuarios', component: UsuariosComponent, canActivate: [soloOwnerGuard] },
     ],
   },
 

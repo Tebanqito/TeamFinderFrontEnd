@@ -49,10 +49,10 @@ describe('MainLayoutComponent', () => {
     expect(navegar).toHaveBeenCalledWith(['/login']);
   });
 
-  it('el owner no ve la pestaña Amigos, pero sí Torneo', () => {
+  it('el owner no ve la pestaña Amigos, pero sí Torneo y Usuarios', () => {
     const enlaces = Array.from(raiz.querySelectorAll('.tabs a')).map((a) => a.textContent?.trim());
 
-    expect(enlaces).toEqual(['Equipos', 'Torneo']);
+    expect(enlaces).toEqual(['Equipos', 'Torneo', 'Usuarios']);
   });
 
   it('un usuario sí ve la pestaña Amigos', async () => {
@@ -61,5 +61,17 @@ describe('MainLayoutComponent', () => {
 
     const enlaces = Array.from(raiz.querySelectorAll('.tabs a')).map((a) => a.getAttribute('href'));
     expect(enlaces).toEqual(['/equipos', '/amigos', '/torneo']);
+    expect(raiz.textContent).not.toContain('Usuarios');
+  });
+
+  it('muestra el nombre de usuario en la barra; si falta, el email', async () => {
+    authService.sesion.set({ token: 'abc123', email: 'juan@mail.com', nombre: 'juan', rol: 'USUARIO' });
+    await fixture.whenStable();
+    expect(raiz.querySelector('.usuario')!.textContent).toContain('juan');
+    expect(raiz.querySelector('.usuario')!.textContent).not.toContain('@');
+
+    authService.sesion.set({ token: 'abc123', email: 'juan@mail.com', rol: 'USUARIO' });
+    await fixture.whenStable();
+    expect(raiz.querySelector('.usuario')!.textContent).toContain('juan@mail.com');
   });
 });
